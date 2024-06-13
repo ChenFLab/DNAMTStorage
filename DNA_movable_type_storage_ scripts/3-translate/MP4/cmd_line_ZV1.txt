@@ -1,0 +1,381 @@
+﻿# #Data preparation
+# 1.Data collection
+lnd login -u X101SC22050646-Z01-J016 -p a1mdyujn
+nohup lnd cp -d oss://CP2019101200013/H101SC22050646/RSSQ00204/X101SC22050646-Z01/X101SC22050646-Z01-J016/  /public3/home/sch7159/work/20221018ZR &
+
+# 2.Unzip
+gzip -d ZV-1_1.fq.gz  ZV-1_2.fq.gz
+
+cp ZV-1_1.fq /public3/home/sch7159/work/20221018ZV
+cp ZV-1_2.fq /public3/home/sch7159/work/20221018ZV
+
+#3.Information detection
+du -sh ZV1_1.fq
+13G
+grep @ ZV1_1.fq| wc -l
+
+13G + 13G
+# reads number：
+22892264 + 22892264
+# Total number of bases：
+ZV1: 11446132000=11.446G
+
+# #Data analysis：
+# 1.Segmentation：
+mv ZV-1_1.fq ZV1_1.fq
+mv ZV-1_2.fq ZV1_2.fq
+ 
+less ZV1_1.fq | wc -l
+less ZV1_2.fq | wc -l
+
+#91569056 divided into 20 parts, taking multiples of 4，4578456
+  
+split -l 4578456 --additional-suffix=_1.fq ZV1_1.fq ZV1
+split -l 4578456 --additional-suffix=_2.fq ZV1_2.fq ZV1
+
+# 2.Analysis pipline：
+nohup python3 paired_decode.py ZV1aa_1.fq ZV1aa_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1ab_1.fq ZV1ab_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ac_1.fq ZV1ac_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ad_1.fq ZV1ad_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ae_1.fq ZV1ae_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1af_1.fq ZV1af_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ag_1.fq ZV1ag_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ah_1.fq ZV1ah_2.fq c10.mw 10 &
+nohup python3 paired_decode.py ZV1ai_1.fq ZV1ai_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1aj_1.fq ZV1aj_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1ak_1.fq ZV1ak_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1al_1.fq ZV1al_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1am_1.fq ZV1am_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1an_1.fq ZV1an_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1ao_1.fq ZV1ao_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZV1ap_1.fq ZV1ap_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1aq_1.fq ZV1aq_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1ar_1.fq ZV1ar_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1as_1.fq ZV1as_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZV1at_1.fq ZV1at_2.fq c10.mw 10 & 
+
+nohup python3 ok_decode.py ZV1aa_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ab_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ac_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ad_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ae_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1af_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ag_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ah_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ai_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1aj_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ak_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1al_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1am_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1an_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ao_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ap_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1aq_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1ar_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1as_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZV1at_1-em.res c10.tem c10.mw &
+
+
+nohup perl mapping.pl ZV1aa_1-snp.fa c10-mapping.mw ZV1aa.sam &
+nohup perl mapping.pl ZV1ab_1-snp.fa c10-mapping.mw ZV1ab.sam &
+nohup perl mapping.pl ZV1ac_1-snp.fa c10-mapping.mw ZV1ac.sam &
+nohup perl mapping.pl ZV1ad_1-snp.fa c10-mapping.mw ZV1ad.sam &
+nohup perl mapping.pl ZV1ae_1-snp.fa c10-mapping.mw ZV1ae.sam &
+nohup perl mapping.pl ZV1af_1-snp.fa c10-mapping.mw ZV1af.sam &
+nohup perl mapping.pl ZV1ag_1-snp.fa c10-mapping.mw ZV1ag.sam &
+nohup perl mapping.pl ZV1ah_1-snp.fa c10-mapping.mw ZV1ah.sam &
+nohup perl mapping.pl ZV1ai_1-snp.fa c10-mapping.mw ZV1ai.sam &
+nohup perl mapping.pl ZV1aj_1-snp.fa c10-mapping.mw ZV1aj.sam &
+nohup perl mapping.pl ZV1ak_1-snp.fa c10-mapping.mw ZV1ak.sam &
+nohup perl mapping.pl ZV1al_1-snp.fa c10-mapping.mw ZV1al.sam &
+nohup perl mapping.pl ZV1am_1-snp.fa c10-mapping.mw ZV1am.sam &
+nohup perl mapping.pl ZV1an_1-snp.fa c10-mapping.mw ZV1an.sam &
+nohup perl mapping.pl ZV1ao_1-snp.fa c10-mapping.mw ZV1ao.sam &
+nohup perl mapping.pl ZV1ap_1-snp.fa c10-mapping.mw ZV1ap.sam &
+nohup perl mapping.pl ZV1aq_1-snp.fa c10-mapping.mw ZV1aq.sam &
+nohup perl mapping.pl ZV1ar_1-snp.fa c10-mapping.mw ZV1ar.sam &
+nohup perl mapping.pl ZV1as_1-snp.fa c10-mapping.mw ZV1as.sam &
+nohup perl mapping.pl ZV1at_1-snp.fa c10-mapping.mw ZV1at.sam &
+
+nohup python3 paired_snp_decode10.py ZV1aa.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ab.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ac.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ad.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ae.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1af.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ag.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ah.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ai.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1aj.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ak.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1al.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1am.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1an.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ao.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ap.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1aq.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1ar.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1as.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZV1at.sam c10-mapping.mw 10 &
+
+# for i in a b c d e f g h i j k l m n o p q r s t 
+# do 
+# cp ZV1a"$i"_1-snp.snp_decode ZV1a"$i".snp_decode
+# done
+
+python3 ok_decode.py ZV1aa.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ab.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ac.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ad.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ae.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1af.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ag.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ah.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ai.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1aj.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ak.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1al.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1am.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1an.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ao.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ap.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1aq.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1ar.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1as.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZV1at.snp_decode c10.tem c10.mw
+
+
+#3.Confirm that the number of reads in SNP and SAM is consistent (it seems that the larger the file, the more problems it will have)
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+grep ">" ZV1a"$i"_1-snp.fa | wc -l
+grep "@SQ" ZV1a"$i".sam |wc -l
+done
+
+
+#4.Two waves of merge integrate separate files together
+mkdir merge
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZV1a"$i"_1-em.okdic merge/
+done
+cd merge
+python3 merge_dic.py ZV1aa_1-em.okdic  ZV1ab_1-em.okdic  ZV12-1-em.okdic 
+python3 merge_dic.py ZV12-1-em.okdic  ZV1ac_1-em.okdic  ZV13-1-em.okdic 
+python3 merge_dic.py ZV13-1-em.okdic  ZV1ad_1-em.okdic  ZV14-1-em.okdic 
+python3 merge_dic.py ZV14-1-em.okdic  ZV1ae_1-em.okdic  ZV15-1-em.okdic 
+python3 merge_dic.py ZV15-1-em.okdic  ZV1af_1-em.okdic  ZV16-1-em.okdic 
+python3 merge_dic.py ZV16-1-em.okdic  ZV1ag_1-em.okdic  ZV17-1-em.okdic 
+python3 merge_dic.py ZV17-1-em.okdic  ZV1ah_1-em.okdic  ZV18-1-em.okdic 
+python3 merge_dic.py ZV18-1-em.okdic  ZV1ai_1-em.okdic  ZV19-1-em.okdic 
+python3 merge_dic.py ZV19-1-em.okdic  ZV1aj_1-em.okdic  ZV110-1-em.okdic 
+python3 merge_dic.py ZV110-1-em.okdic  ZV1ak_1-em.okdic  ZV111-1-em.okdic 
+python3 merge_dic.py ZV111-1-em.okdic  ZV1al_1-em.okdic  ZV112-1-em.okdic 
+python3 merge_dic.py ZV112-1-em.okdic  ZV1am_1-em.okdic  ZV113-1-em.okdic 
+python3 merge_dic.py ZV113-1-em.okdic  ZV1an_1-em.okdic  ZV114-1-em.okdic 
+python3 merge_dic.py ZV114-1-em.okdic  ZV1ao_1-em.okdic  ZV115-1-em.okdic 
+python3 merge_dic.py ZV115-1-em.okdic  ZV1ap_1-em.okdic  ZV116-1-em.okdic 
+python3 merge_dic.py ZV116-1-em.okdic  ZV1aq_1-em.okdic  ZV117-1-em.okdic 
+python3 merge_dic.py ZV117-1-em.okdic  ZV1ar_1-em.okdic  ZV118-1-em.okdic 
+python3 merge_dic.py ZV118-1-em.okdic  ZV1as_1-em.okdic  ZV119-1-em.okdic 
+python3 merge_dic.py ZV119-1-em.okdic  ZV1at_1-em.okdic  ZV120-1-em.okdic 
+
+cp ZV120-1-em.okdic ZV1_outcome.okdic
+less ZV1_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZV1_outcome.xlsx
+
+#snpmerge/
+mkdir snpmerge/
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZV1a"$i".okdic snpmerge/
+done
+cd snpmerge/
+python3 merge_dic.py ZV1aa.okdic  ZV1ab.okdic  ZV12-1-em.okdic 
+python3 merge_dic.py ZV12-1-em.okdic  ZV1ac.okdic  ZV13-1-em.okdic 
+python3 merge_dic.py ZV13-1-em.okdic  ZV1ad.okdic  ZV14-1-em.okdic 
+python3 merge_dic.py ZV14-1-em.okdic  ZV1ae.okdic  ZV15-1-em.okdic 
+python3 merge_dic.py ZV15-1-em.okdic  ZV1af.okdic  ZV16-1-em.okdic 
+python3 merge_dic.py ZV16-1-em.okdic  ZV1ag.okdic  ZV17-1-em.okdic 
+python3 merge_dic.py ZV17-1-em.okdic  ZV1ah.okdic  ZV18-1-em.okdic 
+python3 merge_dic.py ZV18-1-em.okdic  ZV1ai.okdic  ZV19-1-em.okdic 
+python3 merge_dic.py ZV19-1-em.okdic  ZV1aj.okdic  ZV110-1-em.okdic 
+python3 merge_dic.py ZV110-1-em.okdic  ZV1ak.okdic  ZV111-1-em.okdic 
+python3 merge_dic.py ZV111-1-em.okdic  ZV1al.okdic  ZV112-1-em.okdic 
+python3 merge_dic.py ZV112-1-em.okdic  ZV1am.okdic  ZV113-1-em.okdic 
+python3 merge_dic.py ZV113-1-em.okdic  ZV1an.okdic  ZV114-1-em.okdic 
+python3 merge_dic.py ZV114-1-em.okdic  ZV1ao.okdic  ZV115-1-em.okdic 
+python3 merge_dic.py ZV115-1-em.okdic  ZV1ap.okdic  ZV116-1-em.okdic 
+python3 merge_dic.py ZV116-1-em.okdic  ZV1aq.okdic  ZV117-1-em.okdic 
+python3 merge_dic.py ZV117-1-em.okdic  ZV1ar.okdic  ZV118-1-em.okdic 
+python3 merge_dic.py ZV118-1-em.okdic  ZV1as.okdic  ZV119-1-em.okdic 
+python3 merge_dic.py ZV119-1-em.okdic  ZV1at.okdic  ZV120-1-em.okdic 
+
+cp ZV120-1-em.okdic ZV1_snp_outcome.okdic
+less ZV1_snp_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZV1mohumerge.xlsx
+#Combine
+cp ../merge/ZV1_outcome.okdic ZV1_outcome.okdic
+python3 merge_dic.py ZV1_outcome.okdic  ZV1_snp_outcome.okdic  ZV1ef.okdic 
+
+less ZV1ef.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZV1allmerge.xlsx
+
+
+# #Output the result
+#2-missing-segment Analysis of fragment missing situation # Accurate matching have recombination error only, no missing
+mkdir 2-missing-segment
+
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZV1a"$i".errdic 2-missing-segment/
+done
+cd 2-missing-segment
+#merge
+python3 merge_dic.py ZV1aa.errdic  ZV1ab.errdic  ZV12-1-em.errdic 
+python3 merge_dic.py ZV12-1-em.errdic  ZV1ac.errdic  ZV13-1-em.errdic 
+python3 merge_dic.py ZV13-1-em.errdic  ZV1ad.errdic  ZV14-1-em.errdic 
+python3 merge_dic.py ZV14-1-em.errdic  ZV1ae.errdic  ZV15-1-em.errdic 
+python3 merge_dic.py ZV15-1-em.errdic  ZV1af.errdic  ZV16-1-em.errdic 
+python3 merge_dic.py ZV16-1-em.errdic  ZV1ag.errdic  ZV17-1-em.errdic 
+python3 merge_dic.py ZV17-1-em.errdic  ZV1ah.errdic  ZV18-1-em.errdic 
+python3 merge_dic.py ZV18-1-em.errdic  ZV1ai.errdic  ZV19-1-em.errdic 
+python3 merge_dic.py ZV19-1-em.errdic  ZV1aj.errdic  ZV110-1-em.errdic 
+python3 merge_dic.py ZV110-1-em.errdic  ZV1ak.errdic  ZV111-1-em.errdic 
+python3 merge_dic.py ZV111-1-em.errdic  ZV1al.errdic  ZV112-1-em.errdic 
+python3 merge_dic.py ZV112-1-em.errdic  ZV1am.errdic  ZV113-1-em.errdic 
+python3 merge_dic.py ZV113-1-em.errdic  ZV1an.errdic  ZV114-1-em.errdic 
+python3 merge_dic.py ZV114-1-em.errdic  ZV1ao.errdic  ZV115-1-em.errdic 
+python3 merge_dic.py ZV115-1-em.errdic  ZV1ap.errdic  ZV116-1-em.errdic 
+python3 merge_dic.py ZV116-1-em.errdic  ZV1aq.errdic  ZV117-1-em.errdic 
+python3 merge_dic.py ZV117-1-em.errdic  ZV1ar.errdic  ZV118-1-em.errdic 
+python3 merge_dic.py ZV118-1-em.errdic  ZV1as.errdic  ZV119-1-em.errdic 
+python3 merge_dic.py ZV119-1-em.errdic  ZV1at.errdic  ZV120-1-em.errdic 
+
+cp ZV120-1-em.errdic ZV1.errdic
+python3 alignment.py ZV1.errdic
+
+# Error reported, missing package palettable
+# pip install palettable -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/
+
+
+
+#3-recombin
+mkdir 3-recombin
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZV1a"$i"_1-em.errdic 3-recombin/
+done
+cd 3-recombin/
+python3 merge_dic.py ZV1aa_1-em.errdic  ZV1ab_1-em.errdic  ZV12-1-em.errdic 
+python3 merge_dic.py ZV12-1-em.errdic  ZV1ac_1-em.errdic  ZV13-1-em.errdic 
+python3 merge_dic.py ZV13-1-em.errdic  ZV1ad_1-em.errdic  ZV14-1-em.errdic 
+python3 merge_dic.py ZV14-1-em.errdic  ZV1ae_1-em.errdic  ZV15-1-em.errdic 
+python3 merge_dic.py ZV15-1-em.errdic  ZV1af_1-em.errdic  ZV16-1-em.errdic 
+python3 merge_dic.py ZV16-1-em.errdic  ZV1ag_1-em.errdic  ZV17-1-em.errdic 
+python3 merge_dic.py ZV17-1-em.errdic  ZV1ah_1-em.errdic  ZV18-1-em.errdic 
+python3 merge_dic.py ZV18-1-em.errdic  ZV1ai_1-em.errdic  ZV19-1-em.errdic 
+python3 merge_dic.py ZV19-1-em.errdic  ZV1aj_1-em.errdic  ZV110-1-em.errdic 
+python3 merge_dic.py ZV110-1-em.errdic  ZV1ak_1-em.errdic  ZV111-1-em.errdic 
+python3 merge_dic.py ZV111-1-em.errdic  ZV1al_1-em.errdic  ZV112-1-em.errdic 
+python3 merge_dic.py ZV112-1-em.errdic  ZV1am_1-em.errdic  ZV113-1-em.errdic 
+python3 merge_dic.py ZV113-1-em.errdic  ZV1an_1-em.errdic  ZV114-1-em.errdic 
+python3 merge_dic.py ZV114-1-em.errdic  ZV1ao_1-em.errdic  ZV115-1-em.errdic 
+python3 merge_dic.py ZV115-1-em.errdic  ZV1ap_1-em.errdic  ZV116-1-em.errdic 
+python3 merge_dic.py ZV116-1-em.errdic  ZV1aq_1-em.errdic  ZV117-1-em.errdic 
+python3 merge_dic.py ZV117-1-em.errdic  ZV1ar_1-em.errdic  ZV118-1-em.errdic 
+python3 merge_dic.py ZV118-1-em.errdic  ZV1as_1-em.errdic  ZV119-1-em.errdic 
+python3 merge_dic.py ZV119-1-em.errdic  ZV1at_1-em.errdic  ZV120-1-em.errdic 
+
+cp ZV120-1-em.errdic ZV1-em.errdic
+cp ../2-missing-segment/ZV1.errdic ZV1.errdic
+python3 merge_dic.py ZV1-em.errdic ZV1.errdic ZV1all.errdic
+
+nohup python3 arrange_show.py ZV1all.errdic c10.tem c10.mw &
+
+
+#4-zero Output reaction number, group number, intra group number, and number of reads. Based on the situation within each group, preliminarily calculate whether the reaction can be restored. After screening, this format can be used for 5-MW type analysis
+mkdir 4-zero
+cp merge/ZV1_outcome.okdic 4-zero/
+cp snpmerge/ZV1_snp_outcome.okdic 4-zero/
+cd 4-zero
+python3 stat_ok.py ZV1_outcome.okdic ZV1_snp_outcome.okdic ZV1.res
+
+
+
+# zero generate three files
+
+# Extract the first column from zeroRZPI.res, generate uncovered. res file for next analysis
+less zeroRZP1.res | awk '{print $1}' - | sed '$d' - > uncoverRZP1-ef.res
+
+
+
+5-mw
+mkdir 5-mw
+转移all-shipin-6990
+cd 5-mw
+cp ../4-zero/uncoverZV1-ef.res uncoverZV1-ef.res
+python3 tf-idf.py all-shipin-6990.txt uncoverZV1-ef.res 6990
+
+
+# #Overall situation output of sequencing samples
+ cd snpmerge
+less ZV1_outcome.okdic  | tail -n 2
+less ZV1_snp_outcome.okdic | tail -n 2
+#Accurate matching ：16334290+1009620=17343910
+#Fuzzy matching：17175736+755778=17931514
+
+
+ #2. The accuracy of precise matching and fuzzy matching : the number of reads obtained in the previous step/the total number of reads
+#reads number：
+grep @ ZV1_1.fq | wc -l
+#22892264*2=45784528
+# Value x2
+# Accurate matching：/45784528=
+# Fuzzy matching：/45784528=
+
+ # 3.Reorganization is divided into two parts，X-em-pos-ndup.res and X-pos-ndup.res
+  # Missing is the subtraction of 10 segments from all correct and non repetitive positions in X-pos-ndup. res in fuzzy matching.
+  # Empty load is the number in parentheses in the first line of X-pos-ndup.res
+
+
+ # Reorganization：1430104+1479664=2909768
+ # Missing：7154178-1479664=5674514
+ # Empty load：414656
+ 
+# Precise matching of errdic results also needs to be aligned
+cd 3-recombin
+python3 alignment.py ZV1.errdic
+python3 alignment.py ZV1-em.errdic
+
+less ZV1-em-pos-ndup.res
+less ZV1-pos-ndup.res
+
+# #Supplementary charts
+# 1.Output the frequency of movable type
+#uncoverV1-ef-totaltf.txt recorded the frequency of movable type in the reaction
+less uncoverZV1-ef-totaltf.txt | tr -s " " "\t" > huozipinlv-ZV1.txt
+
+# 2.Analysis of threshold 200
+#Set the threshold to 200 before inputting 4-zero analysis results into 5-MW analysis
+cd 4-zero
+awk '$4 < 200' ZV1.res | awk '{print $1}' - > uncoverZV1-200.res
+cd ..
+cd 5-mw
+python3 tf-idf.py all-shipin-6990.txt ../4-zero/uncoverZV1-200.res 6990
+
+
+# 3.reads distribution situation, various data sources
+# MEAN：In the OKDIC integrated with precise and fuzzy matching results, the total number of reads/total number of reactions
+# STD：Standard deviation
+# Q1(25%)：
+# Q2(50%)
+# Q3(75%)
+
+#Precise zero analysis
+mkdir 4-zero-jingzhun
+cp merge/ZV1_outcome.okdic 4-zero-jingzhun/
+cd 4-zero-jingzhun
+python3 stat_ok.py ZV1_outcome.okdic ZV1_outcome.okdic ZV1.res
+less uncoverZV1.res | tr -s " " "\t" > ZV1recover.txt
+cd ..
+cd 4-zero
+less uncoverZV1.res | tr -s " " "\t" > ZV1allrecover.txt

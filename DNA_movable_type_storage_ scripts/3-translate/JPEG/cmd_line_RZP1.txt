@@ -1,0 +1,365 @@
+﻿# #Data preparation
+# 1.Data collection
+lnd login -u X101SC22050646-Z01-J022 -p un9r02xr
+nohup lnd cp -d oss://CP2019101200013/H101SC22050646/RSSQ00204/X101SC22050646-Z01/X101SC22050646-Z01-J022/ /workdir/DNAstorage/20220929_chongqing10/RZP1_trans_supply20221107 &
+# 2.Unzip
+gzip -d RZP1_1.fq.gz  RZP1_2.fq.gz
+cp RZP1_1.fq RZP1_2.fq  /public3/home/scg6719/work/20220930
+
+#3.Information detection
+
+# reads number：
+grep @ RZP1_1.fq | wc -l
+
+#10899122
+
+# Total number of bases：
+
+#ZP 5449561000
+
+# #Data analysis：
+# 1.Segmentation：
+less RZP1_1.fq | wc -l
+less RZP1_2.fq | wc -l
+
+#43596488 divided into 20 parts, taking multiples of 4，2179828
+split -l 2179828 --additional-suffix=_1.fq RZP1_1.fq RZP1
+split -l 2179828 --additional-suffix=_2.fq RZP1_2.fq RZP1
+
+
+# 2.Analysis pipline：
+nohup python3 paired_decode.py RZP1aa_1.fq RZP1aa_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1ab_1.fq RZP1ab_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ac_1.fq RZP1ac_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ad_1.fq RZP1ad_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ae_1.fq RZP1ae_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1af_1.fq RZP1af_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ag_1.fq RZP1ag_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ah_1.fq RZP1ah_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ai_1.fq RZP1ai_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1aj_1.fq RZP1aj_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1ak_1.fq RZP1ak_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1al_1.fq RZP1al_2.fq c10.mw 10 &
+nohup python3 paired_decode.py RZP1am_1.fq RZP1am_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1an_1.fq RZP1an_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ao_1.fq RZP1ao_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1ap_1.fq RZP1ap_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py RZP1aq_1.fq RZP1aq_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1ar_1.fq RZP1ar_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1as_1.fq RZP1as_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py RZP1at_1.fq RZP1at_2.fq c10.mw 10 & 
+
+nohup python3 ok_decode.py RZP1aa_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ab_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ac_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ad_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ae_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1af_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ag_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ah_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ai_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1aj_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ak_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1al_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1am_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1an_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ao_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ap_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1aq_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1ar_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1as_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py RZP1at_1-em.res c10.tem c10.mw &
+
+nohup perl mapping.pl RZP1aa_1-snp.fa c10-mapping.mw RZP1aa.sam &
+nohup perl mapping.pl RZP1ab_1-snp.fa c10-mapping.mw RZP1ab.sam &
+nohup perl mapping.pl RZP1ac_1-snp.fa c10-mapping.mw RZP1ac.sam &
+nohup perl mapping.pl RZP1ad_1-snp.fa c10-mapping.mw RZP1ad.sam &
+nohup perl mapping.pl RZP1ae_1-snp.fa c10-mapping.mw RZP1ae.sam &
+nohup perl mapping.pl RZP1af_1-snp.fa c10-mapping.mw RZP1af.sam &
+nohup perl mapping.pl RZP1ag_1-snp.fa c10-mapping.mw RZP1ag.sam &
+nohup perl mapping.pl RZP1ah_1-snp.fa c10-mapping.mw RZP1ah.sam &
+nohup perl mapping.pl RZP1ai_1-snp.fa c10-mapping.mw RZP1ai.sam &
+nohup perl mapping.pl RZP1aj_1-snp.fa c10-mapping.mw RZP1aj.sam &
+nohup perl mapping.pl RZP1ak_1-snp.fa c10-mapping.mw RZP1ak.sam &
+nohup perl mapping.pl RZP1al_1-snp.fa c10-mapping.mw RZP1al.sam &
+nohup perl mapping.pl RZP1am_1-snp.fa c10-mapping.mw RZP1am.sam &
+nohup perl mapping.pl RZP1an_1-snp.fa c10-mapping.mw RZP1an.sam &
+nohup perl mapping.pl RZP1ao_1-snp.fa c10-mapping.mw RZP1ao.sam &
+nohup perl mapping.pl RZP1ap_1-snp.fa c10-mapping.mw RZP1ap.sam &
+nohup perl mapping.pl RZP1aq_1-snp.fa c10-mapping.mw RZP1aq.sam &
+nohup perl mapping.pl RZP1ar_1-snp.fa c10-mapping.mw RZP1ar.sam &
+nohup perl mapping.pl RZP1as_1-snp.fa c10-mapping.mw RZP1as.sam &
+nohup perl mapping.pl RZP1at_1-snp.fa c10-mapping.mw RZP1at.sam &
+
+nohup python3 paired_snp_decode10.py RZP1aa.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ab.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ac.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ad.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ae.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1af.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ag.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ah.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ai.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1aj.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ak.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1al.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1am.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1an.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ao.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ap.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1aq.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1ar.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1as.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py RZP1at.sam c10-mapping.mw 10 &
+
+python3 ok_decode.py RZP1aa.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ab.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ac.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ad.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ae.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1af.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ag.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ah.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ai.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1aj.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ak.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1al.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1am.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1an.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ao.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ap.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1aq.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1ar.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1as.snp_decode c10.tem c10.mw
+python3 ok_decode.py RZP1at.snp_decode c10.tem c10.mw
+
+
+
+#3.Confirm that the number of reads in SNP and SAM is consistent (it seems that the larger the file, the more problems it will have)
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+grep ">" RZP1a"$i"_1-snp.fa | wc -l
+grep "@SQ" RZP1a"$i".sam |wc -l
+done
+
+#4.Two waves of merge integrate separate files together
+mkdir merge
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp RZP1a"$i"_1-em.okdic merge/
+done
+cd merge
+python3 merge_dic.py RZP1aa_1-em.okdic  RZP1ab_1-em.okdic  RZP12-1-em.okdic 
+python3 merge_dic.py RZP12-1-em.okdic  RZP1ac_1-em.okdic  RZP13-1-em.okdic 
+python3 merge_dic.py RZP13-1-em.okdic  RZP1ad_1-em.okdic  RZP14-1-em.okdic 
+python3 merge_dic.py RZP14-1-em.okdic  RZP1ae_1-em.okdic  RZP15-1-em.okdic 
+python3 merge_dic.py RZP15-1-em.okdic  RZP1af_1-em.okdic  RZP16-1-em.okdic 
+python3 merge_dic.py RZP16-1-em.okdic  RZP1ag_1-em.okdic  RZP17-1-em.okdic 
+python3 merge_dic.py RZP17-1-em.okdic  RZP1ah_1-em.okdic  RZP18-1-em.okdic 
+python3 merge_dic.py RZP18-1-em.okdic  RZP1ai_1-em.okdic  RZP19-1-em.okdic 
+python3 merge_dic.py RZP19-1-em.okdic  RZP1aj_1-em.okdic  RZP110-1-em.okdic 
+python3 merge_dic.py RZP110-1-em.okdic  RZP1ak_1-em.okdic  RZP111-1-em.okdic 
+python3 merge_dic.py RZP111-1-em.okdic  RZP1al_1-em.okdic  RZP112-1-em.okdic 
+python3 merge_dic.py RZP112-1-em.okdic  RZP1am_1-em.okdic  RZP113-1-em.okdic 
+python3 merge_dic.py RZP113-1-em.okdic  RZP1an_1-em.okdic  RZP114-1-em.okdic 
+python3 merge_dic.py RZP114-1-em.okdic  RZP1ao_1-em.okdic  RZP115-1-em.okdic 
+python3 merge_dic.py RZP115-1-em.okdic  RZP1ap_1-em.okdic  RZP116-1-em.okdic 
+python3 merge_dic.py RZP116-1-em.okdic  RZP1aq_1-em.okdic  RZP117-1-em.okdic 
+python3 merge_dic.py RZP117-1-em.okdic  RZP1ar_1-em.okdic  RZP118-1-em.okdic 
+python3 merge_dic.py RZP118-1-em.okdic  RZP1as_1-em.okdic  RZP119-1-em.okdic 
+python3 merge_dic.py RZP119-1-em.okdic  RZP1at_1-em.okdic  RZP120-1-em.okdic 
+
+cp RZP120-1-em.okdic RZP1_outcome.okdic
+less RZP1_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > RZP1_outcome.xlsx
+
+#snpmerge/
+mkdir snpmerge/
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp RZP1a"$i".okdic snpmerge/
+done
+cd snpmerge/
+python3 merge_dic.py RZP1aa.okdic  RZP1ab.okdic  RZP12-1-em.okdic 
+python3 merge_dic.py RZP12-1-em.okdic  RZP1ac.okdic  RZP13-1-em.okdic 
+python3 merge_dic.py RZP13-1-em.okdic  RZP1ad.okdic  RZP14-1-em.okdic 
+python3 merge_dic.py RZP14-1-em.okdic  RZP1ae.okdic  RZP15-1-em.okdic 
+python3 merge_dic.py RZP15-1-em.okdic  RZP1af.okdic  RZP16-1-em.okdic 
+python3 merge_dic.py RZP16-1-em.okdic  RZP1ag.okdic  RZP17-1-em.okdic 
+python3 merge_dic.py RZP17-1-em.okdic  RZP1ah.okdic  RZP18-1-em.okdic 
+python3 merge_dic.py RZP18-1-em.okdic  RZP1ai.okdic  RZP19-1-em.okdic 
+python3 merge_dic.py RZP19-1-em.okdic  RZP1aj.okdic  RZP110-1-em.okdic 
+python3 merge_dic.py RZP110-1-em.okdic  RZP1ak.okdic  RZP111-1-em.okdic 
+python3 merge_dic.py RZP111-1-em.okdic  RZP1al.okdic  RZP112-1-em.okdic 
+python3 merge_dic.py RZP112-1-em.okdic  RZP1am.okdic  RZP113-1-em.okdic 
+python3 merge_dic.py RZP113-1-em.okdic  RZP1an.okdic  RZP114-1-em.okdic 
+python3 merge_dic.py RZP114-1-em.okdic  RZP1ao.okdic  RZP115-1-em.okdic 
+python3 merge_dic.py RZP115-1-em.okdic  RZP1ap.okdic  RZP116-1-em.okdic 
+python3 merge_dic.py RZP116-1-em.okdic  RZP1aq.okdic  RZP117-1-em.okdic 
+python3 merge_dic.py RZP117-1-em.okdic  RZP1ar.okdic  RZP118-1-em.okdic 
+python3 merge_dic.py RZP118-1-em.okdic  RZP1as.okdic  RZP119-1-em.okdic 
+python3 merge_dic.py RZP119-1-em.okdic  RZP1at.okdic  RZP120-1-em.okdic 
+
+cp RZP120-1-em.okdic RZP1_snp_outcome.okdic
+less RZP1_snp_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > RZP1mohumerge.xlsx
+#Combine
+cp ../merge/RZP1_outcome.okdic RZP1_outcome.okdic
+python3 merge_dic.py RZP1_outcome.okdic  RZP1_snp_outcome.okdic  RZP1ef.okdic 
+
+less RZP1ef.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > RZP1allmerge.xlsx
+
+# #Output the result
+#2-missing-segment Analysis of fragment missing situation # Accurate matching have recombination error only, no missing
+mkdir 2-missing-segment
+
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp RZP1a"$i".errdic 2-missing-segment/
+done
+cd 2-missing-segment
+#merge
+python3 merge_dic.py RZP1aa.errdic  RZP1ab.errdic  RZP12-1-em.errdic 
+python3 merge_dic.py RZP12-1-em.errdic  RZP1ac.errdic  RZP13-1-em.errdic 
+python3 merge_dic.py RZP13-1-em.errdic  RZP1ad.errdic  RZP14-1-em.errdic 
+python3 merge_dic.py RZP14-1-em.errdic  RZP1ae.errdic  RZP16-1-em.errdic 
+python3 merge_dic.py RZP16-1-em.errdic  RZP1ag.errdic  RZP17-1-em.errdic 
+python3 merge_dic.py RZP17-1-em.errdic  RZP1ah.errdic  RZP18-1-em.errdic 
+python3 merge_dic.py RZP18-1-em.errdic  RZP1ai.errdic  RZP19-1-em.errdic 
+python3 merge_dic.py RZP19-1-em.errdic  RZP1aj.errdic  RZP110-1-em.errdic 
+python3 merge_dic.py RZP110-1-em.errdic  RZP1ak.errdic  RZP111-1-em.errdic 
+python3 merge_dic.py RZP111-1-em.errdic  RZP1al.errdic  RZP112-1-em.errdic 
+python3 merge_dic.py RZP112-1-em.errdic  RZP1am.errdic  RZP113-1-em.errdic 
+python3 merge_dic.py RZP113-1-em.errdic  RZP1an.errdic  RZP114-1-em.errdic 
+python3 merge_dic.py RZP114-1-em.errdic  RZP1ao.errdic  RZP115-1-em.errdic 
+python3 merge_dic.py RZP115-1-em.errdic  RZP1ap.errdic  RZP116-1-em.errdic 
+python3 merge_dic.py RZP116-1-em.errdic  RZP1aq.errdic  RZP117-1-em.errdic 
+python3 merge_dic.py RZP117-1-em.errdic  RZP1ar.errdic  RZP118-1-em.errdic 
+python3 merge_dic.py RZP118-1-em.errdic  RZP1as.errdic  RZP119-1-em.errdic 
+python3 merge_dic.py RZP119-1-em.errdic  RZP1at.errdic  RZP120-1-em.errdic 
+
+cp RZP120-1-em.errdic RZP1.errdic
+python3 alignment.py RZP1.errdic
+
+# Error reported, missing package palettable
+# pip install palettable -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/
+
+
+
+#3-recombin
+mkdir 3-recombin
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp RZP1a"$i"_1-em.errdic 3-recombin/
+done
+cd 3-recombin/
+python3 merge_dic.py RZP1aa_1-em.errdic  RZP1ab_1-em.errdic  RZP12-1-em.errdic 
+python3 merge_dic.py RZP12-1-em.errdic  RZP1ac_1-em.errdic  RZP13-1-em.errdic 
+python3 merge_dic.py RZP13-1-em.errdic  RZP1ad_1-em.errdic  RZP14-1-em.errdic 
+python3 merge_dic.py RZP14-1-em.errdic  RZP1ae_1-em.errdic  RZP15-1-em.errdic 
+python3 merge_dic.py RZP15-1-em.errdic  RZP1af_1-em.errdic  RZP16-1-em.errdic 
+python3 merge_dic.py RZP16-1-em.errdic  RZP1ag_1-em.errdic  RZP17-1-em.errdic 
+python3 merge_dic.py RZP17-1-em.errdic  RZP1ah_1-em.errdic  RZP18-1-em.errdic 
+python3 merge_dic.py RZP18-1-em.errdic  RZP1ai_1-em.errdic  RZP19-1-em.errdic 
+python3 merge_dic.py RZP19-1-em.errdic  RZP1aj_1-em.errdic  RZP110-1-em.errdic 
+python3 merge_dic.py RZP110-1-em.errdic  RZP1ak_1-em.errdic  RZP111-1-em.errdic 
+python3 merge_dic.py RZP111-1-em.errdic  RZP1al_1-em.errdic  RZP112-1-em.errdic 
+python3 merge_dic.py RZP112-1-em.errdic  RZP1am_1-em.errdic  RZP113-1-em.errdic 
+python3 merge_dic.py RZP113-1-em.errdic  RZP1an_1-em.errdic  RZP114-1-em.errdic 
+python3 merge_dic.py RZP114-1-em.errdic  RZP1ao_1-em.errdic  RZP115-1-em.errdic 
+python3 merge_dic.py RZP115-1-em.errdic  RZP1ap_1-em.errdic  RZP116-1-em.errdic 
+python3 merge_dic.py RZP116-1-em.errdic  RZP1aq_1-em.errdic  RZP117-1-em.errdic 
+python3 merge_dic.py RZP117-1-em.errdic  RZP1ar_1-em.errdic  RZP118-1-em.errdic 
+python3 merge_dic.py RZP118-1-em.errdic  RZP1as_1-em.errdic  RZP119-1-em.errdic 
+python3 merge_dic.py RZP119-1-em.errdic  RZP1at_1-em.errdic  RZP120-1-em.errdic 
+
+cp RZP120-1-em.errdic RZP1-em.errdic
+cp ../2-missing-segment/RZP1.errdic RZP1.errdic
+python3 merge_dic.py RZP1-em.errdic RZP1.errdic RZP1all.errdic
+
+nohup python3 arrange_show.py RZP1all.errdic c10.tem c10.mw &
+
+
+#4-zero Output reaction number, group number, intra group number, and number of reads. Based on the situation within each group, preliminarily calculate whether the reaction can be restored. After screening, this format can be used for 5-MW type analysis
+mkdir 4-zero
+cp merge/RZP1_outcome.okdic 4-zero/
+cp snpmerge/RZP1_snp_outcome.okdic 4-zero/
+cd 4-zero
+python3 stat_ok.py RZP1_outcome.okdic RZP1_snp_outcome.okdic RZP1.res
+
+
+# zero generate three files
+
+# Extract the first column from zeroRZPI.res, generate uncovered. res file for next analysis
+less zeroRZP1.res | awk '{print $1}' - | sed '$d' - > uncoverRZP1-ef.res
+
+
+#5-mw
+mkdir 5-mw
+cd 5-mw
+cp ../4-zero/uncoverRZP1-ef.res uncoverRZP1-ef.res
+python3 tf-idf.py all-tupian-4200.txt uncoverRZP1-ef.res 4200
+
+
+# #Overall situation output of sequencing samples
+
+less RZP1_outcome.okdic  | tail -n 2
+less RZP1_snp_outcome.okdic | tail -n 2
+#Accurate matching ：7750160
+#Fuzzy matching：9794478
+
+
+
+ #2. The accuracy of precise matching and fuzzy matching : the number of reads obtained in the previous step/the total number of reads
+#reads number：
+grep @ RZP1_1.fq | wc -l
+#10899122
+# Value x2
+# Accurate matching：7750160/21798244=0.35554
+# Fuzzy matching：9794478/21798244=0.44932
+
+ # 3.Reorganization is divided into two parts，X-em-pos-ndup.res and X-pos-ndup.res
+  # Missing is the subtraction of 10 segments from all correct and non repetitive positions in X-pos-ndup. res in fuzzy matching.
+  # Empty load is the number in parentheses in the first line of X-pos-ndup.res
+
+ # Reorganization：569980+691860=1261840
+ # Missing：2616290-691860=1924430
+ # Empty load：230924
+ 
+# Precise matching of errdic results also needs to be aligned
+cd 3-recombin
+python3 alignment.py RZP1.errdic
+python3 alignment.py RZP1-em.errdic
+
+less $i-em-pos-ndup.res
+less $i-pos-ndup.res
+
+# #Supplementary charts
+# 1.Output the frequency of movable type
+#uncoverV1-ef-totaltf.txt recorded the frequency of movable type in the reaction
+less uncoverRZP1-ef-totaltf.txt | tr -s " " "\t" > huozipinlv-V1.txt
+
+
+# 2.Analysis of threshold 200
+#Set the threshold to 200 before inputting 4-zero analysis results into 5-MW analysis
+cd 4-zero
+awk '$4 < 200' RZP1.res | awk '{print $1}' - > uncoverRZP1-200.res
+cd ..
+cd 5-mw
+python3 tf-idf.py all-tupian-4200.txt ../4-zero/uncoverRZP1-200.res 4200
+
+
+# 3.reads distribution situation, various data sources
+# MEAN：In the OKDIC integrated with precise and fuzzy matching results, the total number of reads/total number of reactions
+# STD：Standard deviation
+# Q1(25%)：
+# Q2(50%)
+# Q3(75%)
+
+#Precise zero analysis
+mkdir 4-zero-jingzhun
+cp merge/RZP1_outcome.okdic 4-zero-jingzhun/
+cd 4-zero-jingzhun
+python3 stat_ok.py RZP1_outcome.okdic RZP1_outcome.okdic RZP1.res
+less uncoverRZP1.res | tr -s " " "\t" > RZP1recover.txt
+cd ..
+cd 4-zero
+less uncoverRZP1.res | tr -s " " "\t" > RZP1allrecover.txt

@@ -1,0 +1,22 @@
+# #exactly matching
+nohup perl mapping.pl ZT1_1-snp.fa c10-mapping.mw ZT1.sam &
+nohup python3 paired_snp_decode10.py ZT1.sam c10-mapping.mw 10 &
+python3 ok_decode.py ZT1.snp_decode c10.tem c10.mw
+
+#3.Information detection
+#1-merge_okdic
+
+python3 merge_dic.py ZT1_1-em.okdic ZT1.okdic ZT1-efm.okdic
+less ZT1-efm.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZT1merge.xlsx
+python3  ok_decode.py ZT1-efm.dic  c10.tem c10.mw
+
+#2-missing-segment Analysis of fragment missing situation # Accurate matching have recombination error only, no missing
+python3 alignment.py ZT1.errdic 
+
+#3-recombin
+python3 merge_dic.py ZT1.errdic ZT1_1-em.errdic ZT1-ef.errdic
+nohup python3 arrange_show.py ZT1-ef.errdic c10.tem c10.mw &
+
+#4-zero Output reaction number, group number, intra group number, and number of reads. Based on the situation within each group, preliminarily calculate whether the reaction can be restored. After screening, this format can be used for 5-MW type analysis
+python3 stat_ok.py ZT1_1-em.okdic ZT1.okdic ZT1.res
+less zeroZT1.res | awk '{print $1}' - | sed '$d' - > uncoverZP1-ef.res

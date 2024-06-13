@@ -1,0 +1,363 @@
+﻿# #Data preparation
+# 1.Data collection
+lnd login -u X101SC22050646-Z01-J016 -p a1mdyujn
+nohup lnd cp -d oss://CP2019101200013/H101SC22050646/RSSQ00204/X101SC22050646-Z01/X101SC22050646-Z01-J016/  /public3/home/sch7159/work/20221018ZR &
+
+# 2.Unzip
+gzip -d ZR-1_1.fq.gz  ZR-1_2.fq.gz
+
+cp ZR-1_1.fq /public3/home/sch7159/work/20221018ZR
+cp ZR-1_2.fq /public3/home/sch7159/work/20221018ZR
+
+#3.Information detection
+du -sh ZR-1_1.fq
+7.2G
+grep @ ZR-1_1.fq | wc -l
+
+
+7.2G + 7.2G
+# reads number：
+13536621 + 13536621
+# Total number of bases：
+ZR1: 6768310500=6.77G
+
+mv ZR-1_1.fq ZR1_1.fq
+mv ZR-1_2.fq ZR1_2.fq
+ 
+less ZR1_1.fq | wc -l
+less ZR1_2.fq | wc -l
+
+54146484 divided into 20 parts，taking multiples of 4，2707328
+
+split -l 2707328 --additional-suffix=_1.fq ZR1_1.fq ZR1
+split -l 2707328 --additional-suffix=_2.fq ZR1_2.fq ZR1
+
+# 2.Analysis pipline：
+nohup python3 paired_decode.py ZR1aa_1.fq ZR1aa_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1ab_1.fq ZR1ab_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ac_1.fq ZR1ac_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ad_1.fq ZR1ad_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ae_1.fq ZR1ae_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1af_1.fq ZR1af_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ag_1.fq ZR1ag_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ah_1.fq ZR1ah_2.fq c10.mw 10 &
+nohup python3 paired_decode.py ZR1ai_1.fq ZR1ai_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1aj_1.fq ZR1aj_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1ak_1.fq ZR1ak_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1al_1.fq ZR1al_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1am_1.fq ZR1am_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1an_1.fq ZR1an_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1ao_1.fq ZR1ao_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1ap_1.fq ZR1ap_2.fq c10.mw 10 &  
+nohup python3 paired_decode.py ZR1aq_1.fq ZR1aq_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1ar_1.fq ZR1ar_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1as_1.fq ZR1as_2.fq c10.mw 10 & 
+nohup python3 paired_decode.py ZR1at_1.fq ZR1at_2.fq c10.mw 10 & 
+
+nohup python3 ok_decode.py ZR1aa_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ab_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ac_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ad_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ae_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1af_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ag_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ah_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ai_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1aj_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ak_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1al_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1am_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1an_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ao_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ap_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1aq_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1ar_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1as_1-em.res c10.tem c10.mw &
+nohup python3 ok_decode.py ZR1at_1-em.res c10.tem c10.mw &
+
+nohup perl mapping.pl ZR1aa_1-snp.fa c10-mapping.mw ZR1aa.sam &
+nohup perl mapping.pl ZR1ab_1-snp.fa c10-mapping.mw ZR1ab.sam &
+nohup perl mapping.pl ZR1ac_1-snp.fa c10-mapping.mw ZR1ac.sam &
+nohup perl mapping.pl ZR1ad_1-snp.fa c10-mapping.mw ZR1ad.sam &
+nohup perl mapping.pl ZR1ae_1-snp.fa c10-mapping.mw ZR1ae.sam &
+nohup perl mapping.pl ZR1af_1-snp.fa c10-mapping.mw ZR1af.sam &
+nohup perl mapping.pl ZR1ag_1-snp.fa c10-mapping.mw ZR1ag.sam &
+nohup perl mapping.pl ZR1ah_1-snp.fa c10-mapping.mw ZR1ah.sam &
+nohup perl mapping.pl ZR1ai_1-snp.fa c10-mapping.mw ZR1ai.sam &
+nohup perl mapping.pl ZR1aj_1-snp.fa c10-mapping.mw ZR1aj.sam &
+nohup perl mapping.pl ZR1ak_1-snp.fa c10-mapping.mw ZR1ak.sam &
+nohup perl mapping.pl ZR1al_1-snp.fa c10-mapping.mw ZR1al.sam &
+nohup perl mapping.pl ZR1am_1-snp.fa c10-mapping.mw ZR1am.sam &
+nohup perl mapping.pl ZR1an_1-snp.fa c10-mapping.mw ZR1an.sam &
+nohup perl mapping.pl ZR1ao_1-snp.fa c10-mapping.mw ZR1ao.sam &
+nohup perl mapping.pl ZR1ap_1-snp.fa c10-mapping.mw ZR1ap.sam &
+nohup perl mapping.pl ZR1aq_1-snp.fa c10-mapping.mw ZR1aq.sam &
+nohup perl mapping.pl ZR1ar_1-snp.fa c10-mapping.mw ZR1ar.sam &
+nohup perl mapping.pl ZR1as_1-snp.fa c10-mapping.mw ZR1as.sam &
+nohup perl mapping.pl ZR1at_1-snp.fa c10-mapping.mw ZR1at.sam &
+
+nohup python3 paired_snp_decode10.py ZR1aa.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ab.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ac.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ad.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ae.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1af.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ag.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ah.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ai.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1aj.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ak.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1al.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1am.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1an.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ao.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ap.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1aq.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1ar.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1as.sam c10-mapping.mw 10 &
+nohup python3 paired_snp_decode10.py ZR1at.sam c10-mapping.mw 10 &
+
+python3 ok_decode.py ZR1aa.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ab.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ac.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ad.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ae.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1af.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ag.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ah.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ai.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1aj.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ak.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1al.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1am.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1an.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ao.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ap.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1aq.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1ar.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1as.snp_decode c10.tem c10.mw
+python3 ok_decode.py ZR1at.snp_decode c10.tem c10.mw
+
+#3.Confirm that the number of reads in SNP and SAM is consistent (it seems that the larger the file, the more problems it will have)
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+grep ">" ZR1a"$i"_1-snp.fa | wc -l
+grep "@SQ" ZR1a"$i".sam |wc -l
+done
+
+#4.Two waves of merge integrate separate files together
+mkdir merge
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZR1a"$i"_1-em.okdic merge/
+done
+cd merge
+python3 merge_dic.py ZR1aa_1-em.okdic  ZR1ab_1-em.okdic  ZR12-1-em.okdic 
+python3 merge_dic.py ZR12-1-em.okdic  ZR1ac_1-em.okdic  ZR13-1-em.okdic 
+python3 merge_dic.py ZR13-1-em.okdic  ZR1ad_1-em.okdic  ZR14-1-em.okdic 
+python3 merge_dic.py ZR14-1-em.okdic  ZR1ae_1-em.okdic  ZR15-1-em.okdic 
+python3 merge_dic.py ZR15-1-em.okdic  ZR1af_1-em.okdic  ZR16-1-em.okdic 
+python3 merge_dic.py ZR16-1-em.okdic  ZR1ag_1-em.okdic  ZR17-1-em.okdic 
+python3 merge_dic.py ZR17-1-em.okdic  ZR1ah_1-em.okdic  ZR18-1-em.okdic 
+python3 merge_dic.py ZR18-1-em.okdic  ZR1ai_1-em.okdic  ZR19-1-em.okdic 
+python3 merge_dic.py ZR19-1-em.okdic  ZR1aj_1-em.okdic  ZR110-1-em.okdic 
+python3 merge_dic.py ZR110-1-em.okdic  ZR1ak_1-em.okdic  ZR111-1-em.okdic 
+python3 merge_dic.py ZR111-1-em.okdic  ZR1al_1-em.okdic  ZR112-1-em.okdic 
+python3 merge_dic.py ZR112-1-em.okdic  ZR1am_1-em.okdic  ZR113-1-em.okdic 
+python3 merge_dic.py ZR113-1-em.okdic  ZR1an_1-em.okdic  ZR114-1-em.okdic 
+python3 merge_dic.py ZR114-1-em.okdic  ZR1ao_1-em.okdic  ZR115-1-em.okdic 
+python3 merge_dic.py ZR115-1-em.okdic  ZR1ap_1-em.okdic  ZR116-1-em.okdic 
+python3 merge_dic.py ZR116-1-em.okdic  ZR1aq_1-em.okdic  ZR117-1-em.okdic 
+python3 merge_dic.py ZR117-1-em.okdic  ZR1ar_1-em.okdic  ZR118-1-em.okdic 
+python3 merge_dic.py ZR118-1-em.okdic  ZR1as_1-em.okdic  ZR119-1-em.okdic 
+python3 merge_dic.py ZR119-1-em.okdic  ZR1at_1-em.okdic  ZR120-1-em.okdic 
+
+cp ZR120-1-em.okdic ZR1_outcome.okdic
+less ZR1_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZR1_outcome.xlsx
+
+#snpmerge/
+mkdir snpmerge/
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZR1a"$i".okdic snpmerge/
+done
+cd snpmerge/
+python3 merge_dic.py ZR1aa.okdic  ZR1ab.okdic  ZR12-1-em.okdic 
+python3 merge_dic.py ZR12-1-em.okdic  ZR1ac.okdic  ZR13-1-em.okdic 
+python3 merge_dic.py ZR13-1-em.okdic  ZR1ad.okdic  ZR14-1-em.okdic 
+python3 merge_dic.py ZR14-1-em.okdic  ZR1ae.okdic  ZR15-1-em.okdic 
+python3 merge_dic.py ZR15-1-em.okdic  ZR1af.okdic  ZR16-1-em.okdic 
+python3 merge_dic.py ZR16-1-em.okdic  ZR1ag.okdic  ZR17-1-em.okdic 
+python3 merge_dic.py ZR17-1-em.okdic  ZR1ah.okdic  ZR18-1-em.okdic 
+python3 merge_dic.py ZR18-1-em.okdic  ZR1ai.okdic  ZR19-1-em.okdic 
+python3 merge_dic.py ZR19-1-em.okdic  ZR1aj.okdic  ZR110-1-em.okdic 
+python3 merge_dic.py ZR110-1-em.okdic  ZR1ak.okdic  ZR111-1-em.okdic 
+python3 merge_dic.py ZR111-1-em.okdic  ZR1al.okdic  ZR112-1-em.okdic 
+python3 merge_dic.py ZR112-1-em.okdic  ZR1am.okdic  ZR113-1-em.okdic 
+python3 merge_dic.py ZR113-1-em.okdic  ZR1an.okdic  ZR114-1-em.okdic 
+python3 merge_dic.py ZR114-1-em.okdic  ZR1ao.okdic  ZR115-1-em.okdic 
+python3 merge_dic.py ZR115-1-em.okdic  ZR1ap.okdic  ZR116-1-em.okdic 
+python3 merge_dic.py ZR116-1-em.okdic  ZR1aq.okdic  ZR117-1-em.okdic 
+python3 merge_dic.py ZR117-1-em.okdic  ZR1ar.okdic  ZR118-1-em.okdic 
+python3 merge_dic.py ZR118-1-em.okdic  ZR1as.okdic  ZR119-1-em.okdic 
+python3 merge_dic.py ZR119-1-em.okdic  ZR1at.okdic  ZR120-1-em.okdic 
+
+cp ZR120-1-em.okdic ZR1_snp_outcome.okdic
+less ZR1_snp_outcome.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZR1mohumerge.xlsx
+#Combine
+cp ../merge/ZR1_outcome.okdic ZR1_outcome.okdic
+python3 merge_dic.py ZR1_outcome.okdic  ZR1_snp_outcome.okdic  ZR1ef.okdic 
+
+less ZR1ef.okdic | tr -s "," "\t" | tr -d "'" | tr -d "(" | tr -d ")"| tr -d " " > ZR1allmerge.xlsx
+
+# #Output the result
+#2-missing-segment Analysis of fragment missing situation # Accurate matching have recombination error only, no missing
+mkdir 2-missing-segment
+
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZR1a"$i".errdic 2-missing-segment/
+done
+cd 2-missing-segment
+#merge
+python3 merge_dic.py ZR1aa.errdic  ZR1ab.errdic  ZR12-1-em.errdic 
+python3 merge_dic.py ZR12-1-em.errdic  ZR1ac.errdic  ZR13-1-em.errdic 
+python3 merge_dic.py ZR13-1-em.errdic  ZR1ad.errdic  ZR14-1-em.errdic 
+python3 merge_dic.py ZR14-1-em.errdic  ZR1ae.errdic  ZR15-1-em.errdic 
+python3 merge_dic.py ZR15-1-em.errdic  ZR1af.errdic  ZR16-1-em.errdic 
+python3 merge_dic.py ZR16-1-em.errdic  ZR1ag.errdic  ZR17-1-em.errdic 
+python3 merge_dic.py ZR17-1-em.errdic  ZR1ah.errdic  ZR18-1-em.errdic 
+python3 merge_dic.py ZR18-1-em.errdic  ZR1ai.errdic  ZR19-1-em.errdic 
+python3 merge_dic.py ZR19-1-em.errdic  ZR1aj.errdic  ZR110-1-em.errdic 
+python3 merge_dic.py ZR110-1-em.errdic  ZR1ak.errdic  ZR111-1-em.errdic 
+python3 merge_dic.py ZR111-1-em.errdic  ZR1al.errdic  ZR112-1-em.errdic 
+python3 merge_dic.py ZR112-1-em.errdic  ZR1am.errdic  ZR113-1-em.errdic 
+python3 merge_dic.py ZR113-1-em.errdic  ZR1an.errdic  ZR114-1-em.errdic 
+python3 merge_dic.py ZR114-1-em.errdic  ZR1ao.errdic  ZR115-1-em.errdic 
+python3 merge_dic.py ZR115-1-em.errdic  ZR1ap.errdic  ZR116-1-em.errdic 
+python3 merge_dic.py ZR116-1-em.errdic  ZR1aq.errdic  ZR117-1-em.errdic 
+python3 merge_dic.py ZR117-1-em.errdic  ZR1ar.errdic  ZR118-1-em.errdic 
+python3 merge_dic.py ZR118-1-em.errdic  ZR1as.errdic  ZR119-1-em.errdic 
+python3 merge_dic.py ZR119-1-em.errdic  ZR1at.errdic  ZR120-1-em.errdic 
+
+cp ZR120-1-em.errdic ZR1.errdic
+python3 alignment.py ZR1.errdic
+
+# Error reported, missing package palettable
+# pip install palettable -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/
+
+
+
+3-recombin
+mkdir 3-recombin
+for i in a b c d e f g h i j k l m n o p q r s t 
+do 
+cp ZR1a"$i"_1-em.errdic 3-recombin/
+done
+cd 3-recombin/
+python3 merge_dic.py ZR1aa_1-em.errdic  ZR1ab_1-em.errdic  ZR12-1-em.errdic 
+python3 merge_dic.py ZR12-1-em.errdic  ZR1ac_1-em.errdic  ZR13-1-em.errdic 
+python3 merge_dic.py ZR13-1-em.errdic  ZR1ad_1-em.errdic  ZR14-1-em.errdic 
+python3 merge_dic.py ZR14-1-em.errdic  ZR1ae_1-em.errdic  ZR15-1-em.errdic 
+python3 merge_dic.py ZR15-1-em.errdic  ZR1af_1-em.errdic  ZR16-1-em.errdic 
+python3 merge_dic.py ZR16-1-em.errdic  ZR1ag_1-em.errdic  ZR17-1-em.errdic 
+python3 merge_dic.py ZR17-1-em.errdic  ZR1ah_1-em.errdic  ZR18-1-em.errdic 
+python3 merge_dic.py ZR18-1-em.errdic  ZR1ai_1-em.errdic  ZR19-1-em.errdic 
+python3 merge_dic.py ZR19-1-em.errdic  ZR1aj_1-em.errdic  ZR110-1-em.errdic 
+python3 merge_dic.py ZR110-1-em.errdic  ZR1ak_1-em.errdic  ZR111-1-em.errdic 
+python3 merge_dic.py ZR111-1-em.errdic  ZR1al_1-em.errdic  ZR112-1-em.errdic 
+python3 merge_dic.py ZR112-1-em.errdic  ZR1am_1-em.errdic  ZR113-1-em.errdic 
+python3 merge_dic.py ZR113-1-em.errdic  ZR1an_1-em.errdic  ZR114-1-em.errdic 
+python3 merge_dic.py ZR114-1-em.errdic  ZR1ao_1-em.errdic  ZR115-1-em.errdic 
+python3 merge_dic.py ZR115-1-em.errdic  ZR1ap_1-em.errdic  ZR116-1-em.errdic 
+python3 merge_dic.py ZR116-1-em.errdic  ZR1aq_1-em.errdic  ZR117-1-em.errdic 
+python3 merge_dic.py ZR117-1-em.errdic  ZR1ar_1-em.errdic  ZR118-1-em.errdic 
+python3 merge_dic.py ZR118-1-em.errdic  ZR1as_1-em.errdic  ZR119-1-em.errdic 
+python3 merge_dic.py ZR119-1-em.errdic  ZR1at_1-em.errdic  ZR120-1-em.errdic 
+
+cp ZR120-1-em.errdic ZR1-em.errdic
+cp ../2-missing-segment/ZR1.errdic ZR1.errdic
+python3 merge_dic.py ZR1-em.errdic ZR1.errdic ZR1all.errdic
+
+nohup python3 arrange_show.py ZR1all.errdic c10.tem c10.mw &
+
+
+#4-zero Output reaction number, group number, intra group number, and number of reads. Based on the situation within each group, preliminarily calculate whether the reaction can be restored. After screening, this format can be used for 5-MW type analysis
+mkdir 4-zero
+cp merge/ZR1_outcome.okdic 4-zero/
+cp snpmerge/ZR1_snp_outcome.okdic 4-zero/
+cd 4-zero
+python3 stat_ok.py ZR1_outcome.okdic ZR1_snp_outcome.okdic ZR1.res
+
+
+# zero generate three files
+
+# Extract the first column from zeroRZPI.res, generate uncovered. res file for next analysis
+less zeroRZP1.res | awk '{print $1}' - | sed '$d' - > uncoverRZP1-ef.res
+
+
+
+5-mw
+mkdir 5-mw
+转移all-yinpin-5460
+cd 5-mw
+cp ../4-zero/uncoverZR1-ef.res uncoverZR1-ef.res
+python3 tf-idf.py all-yinpin-5460.txt uncoverZR1-ef.res 5460
+
+
+# #Overall situation output of sequencing samples
+
+ cd snpmerge
+less ZR1_outcome.okdic  | tail -n 2
+less ZR1_snp_outcome.okdic | tail -n 2
+#Accurate matching：6713434+421818=7135252
+#Fuzzy matching：13553408+648032=14201440
+
+
+
+ #2. The accuracy of precise matching and fuzzy matching : the number of reads obtained in the previous step/the total number of reads
+#reads number：
+grep @ ZR1_1.fq | wc -l
+#27073242
+#ValueX2
+#Accurate matching：7135252/27073242=0.2636
+#Fuzzy matching：14201440/27073242=0.5246
+
+ # 3.Reorganization is divided into two parts，X-em-pos-ndup.res and X-pos-ndup.res
+  # Missing is the subtraction of 10 segments from all correct and non repetitive positions in X-pos-ndup. res in fuzzy matching.
+  # Empty load is the number in parentheses in the first line of X-pos-ndup.res
+
+ # Reorganization：528782+1051114=1579896
+ # Missing：3902928-1051114=2851814
+# Empty load：340874
+ 
+# Precise matching of errdic results also needs to be aligned
+cd 3-recombin
+python3 alignment.py ZR1.errdic
+python3 alignment.py ZR1-em.errdic
+
+less ZR1-em-pos-ndup.res
+less ZR1-pos-ndup.res
+
+
+# #Supplementary charts
+# 1.Output the frequency of movable type
+#uncoverV1-ef-totaltf.txt recorded the frequency of movable type in the reaction
+less uncoverZR1-ef-totaltf.txt | tr -s " " "\t" > huozipinlv-ZR1.txt
+
+
+# 2.Analysis of threshold 200
+Set the threshold to 200 before inputting 4-zero analysis results into 5-MW analysis
+cd 4-zero
+awk '$4 < 200' ZR1.res | awk '{print $1}' - > uncoverZR1-200.res
+cd ..
+cd 5-mw
+python3 tf-idf.py all-yinpin-5460.txt ../4-zero/uncoverZR1-200.res 5460
+
+
+# 3.reads distribution situation, various data sources
+# MEAN：In the OKDIC integrated with precise and fuzzy matching results, the total number of reads/total number of reactions
+# STD：Standard deviation
+# Q1(25%)：
+# Q2(50%)
+# Q3(75%)
